@@ -12,7 +12,7 @@ class CFStack(object):
     region, template and what other stacks it depends on.
     """
     def __init__(self, mega_stack_name, name, params, template_name, region,
-                 sns_topic_arn, tags=None, depends_on=None):
+                 sns_topic_arn, tags=None, depends_on=None, disable_rollback=False):
         self.logger = logging.getLogger(__name__)
         if mega_stack_name == name:
             self.cf_stack_name = name
@@ -35,6 +35,7 @@ class CFStack(object):
                     self.depends_on.append("%s-%s" % (mega_stack_name, dep))
         self.region = region
         self.sns_topic_arn = sns_topic_arn
+        self.disable_rollback = disable_rollback
 
         # Safer than setting default value for tags = {}
         if tags is None:

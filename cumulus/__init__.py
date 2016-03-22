@@ -35,6 +35,11 @@ def main():
         dest="stackname", required=False,
         help="The stack name, used with the watch action,"
              " ignored for other actions")
+    conf_parser.add_argument(
+            "-d", "--disable-rollback",
+            dest="disable_rollback", required=False, action="store_true",
+            help="Disable the from being rolled back, useful when testing")
+
     args = conf_parser.parse_args()
 
     # Validate that action is something we know what to do with
@@ -67,7 +72,7 @@ def main():
     logging.getLogger('boto').setLevel(boto_numeric_level)
 
     # Create the mega_stack object and sort out dependencies
-    the_mega_stack = MegaStack(args.yamlfile)
+    the_mega_stack = MegaStack(args.yamlfile, args.disable_rollback)
     the_mega_stack.sort_stacks_by_deps()
 
     # Print some info about what we found in the yaml and dependency order
